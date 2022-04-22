@@ -1,0 +1,21 @@
+ifeq ($(ASAN),enable)
+LDFLAGS   += -fsanitize=address   -fno-omit-frame-pointer -fno-common
+LIBCFLAGS += -fsanitize=address -fno-omit-frame-pointer -fno-common
+LIB_LIBRARIES += -lasan
+endif
+
+
+ifeq ($(COVERAGE),enable)
+LIBCFLAGS += -fprofile-arcs -ftest-coverage
+LDFLAGS += -fprofile-arcs -ftest-coverage #-Wall -Werror #-pedantic -Wall -Wextra
+endif
+
+
+
+#!/bin/sh
+
+find . -iname "*gcda" -exec cp {} ./coverage/. \;
+find . -iname "*gcno" -exec cp {} ./coverage/. \;
+lcov --capture --directory ./coverage/. --output-file ./coverage/app.info
+genhtml ./coverage/app.info -o ./coverage/.
+
