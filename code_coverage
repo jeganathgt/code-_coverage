@@ -19,3 +19,8 @@ find . -iname "*gcno" -exec cp {} ./coverage/. \;
 lcov --capture --directory ./coverage/. --output-file ./coverage/app.info
 genhtml ./coverage/app.info -o ./coverage/.
 
+
+eval "export LD_LIBRARY_PATH=$PWD/ieee1905/output:$PWD/mesh_wee_controller:$PWD/libmultiap_platform"
+eval "export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libasan.so.4"
+eval "export ASAN_OPTIONS=log_path=/home/ayagriver/Desktop/asan_log_ctrl.txt:halt_on_error=1:strict_string_checks=1:allocator_may_return_null=1"
+echo "Launching map_controller $PWD/multiap_controller/multiap_controller -m ubus"
